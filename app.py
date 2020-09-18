@@ -25,7 +25,7 @@ class LoginForm(FlaskForm):
 class SignUpForm(FlaskForm):
     email = StringField('Email', validators=[InputRequired(), Email(
         message='Invalid Email'), Length(max=50)])
-    username = StringField('username', validators=[
+    username = StringField('Username', validators=[
         InputRequired(), Length(min=4, max=20)])
     password = StringField('Password', validators=[
         InputRequired(), Length(min=8, max=80)])
@@ -51,7 +51,8 @@ def login():
     signup_form = SignUpForm()
     login_form = LoginForm()
 
-    # if login_form.validate_on_submit():
+    if login_form.validate_on_submit():
+        return "<h1>HI</h1>"
     # handle the login form
     # render the same template to pass the error message
     # or pass `form.errors` with `flash()` or `session` then redirect to /
@@ -63,7 +64,8 @@ def register():
     signup_form = SignUpForm()
     login_form = LoginForm()
 
-    # if signup_form.validate_on_submit():
+    if signup_form.validate_on_submit():
+        return "HI"
     # handle the register form
     # render the same template to pass the error message
     # or pass `form.errors` with `flash()` or `session` then redirect to /

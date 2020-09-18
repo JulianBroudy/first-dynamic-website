@@ -13,75 +13,66 @@
 
 
 {% block content %}
-<div class="container">
 
-  <header class="header-wrapper">
-    Hellooo
-  </header>
+<div id="container">
 
-  <div class="content-wrapper" id="content-wrapper">
+  <div class="form-container login">
 
-    <div class="form_container sign_in">
-      <form action="/login" method="POST">
-             <h1 class="form-header">Log in</h1>
-             {{ login_form.hidden_tag() }}
-             {{ wtf.form_field(login_form.username) }}
-             {{ wtf.form_field(login_form.password) }}
-             {{ wtf.form_field(login_form.remember) }}
-             <button type="submit" class="btn btn-lg btn-primary btn-block">Log In</button>
-             <!-- <div class="submit">
-               <button id="btnin" name="signin" type="submit" class="overlay_button">Log In</button>
-             </div> -->
-
-      </form>
-    </div>
-    <div class="form_container sign_up">
-      <form action="/signup" method="POST">
-        <h1 class="form-header">Create an Account</h1>
-        {{ signup_form.hidden_tag() }}
-        {{ wtf.form_field(signup_form.email) }}
-        {{ wtf.form_field(signup_form.username) }}
-        {{ wtf.form_field(signup_form.password) }}
-        <button type="submit" class="btn btn-lg btn-primary btn-block">Sign Up</button>
-
-        <!-- <div class="user icon"><input type="text" id="user" name="user" placeholder="Full Name" required /><i class="fa fa-user fa-sm"></i></div>
-        <div class="email icon"><input type="text" id="email_up" name="email" placeholder="Email address" required /><i class="fa fa-envelope fa-sm"></i></div>
-        <div class="phone icon"><input type="text" id="phone" name="phone" placeholder="Phone number" required /><i class="fa fa-phone fa-sm"></i></div>
-        <div class="password icon"><input type="password" id="password" name="password" placeholder="Create password" required /><i class="fas fa-key"></i><i class="show fas fa-eye-slash" onclick="myFunction()"></i></div>
-        <div class="password icon"><input type="password" id="cpassword" name="cpassword" placeholder="Repeat password" required /><i class="fas fa-key"></i><i class="show fas fa-eye-slash" onclick="myFunction2()"></i></div>
-        <div class="submit">
-          <button id="btnin" name="signup" type="submit" class="overlay_button">Sign up</button>
-        </div> -->
-
-
-      </form>
-    </div>
-    <div class="overlay_container">
-      <div class="overlay">
-        <div class="overlay_panel overlay_left">
-          <h1>Welcome Back!</h1>
-          <p>Please login with your personal details</p>
-          <button id="signIn" type="button" class="overlay_button">Log In</button>
-        </div>
-        <div class="overlay_panel overlay_right">
-          <h1>Hello dear Friend!</h1>
-          <p>Do you want to become part of our community?</p>
-          <button id="signUp" type="button" class="overlay_button">Sign Up</button>
-          <button id="signInMobile" type="button" class="overlay_button">Log In</button>
-        </div>
+    <form action="/login" method="POST">
+      <div class="form-header">
+        <h1>Log In</h1>
       </div>
-    </div>
+
+      {{ login_form.hidden_tag() }}
+      {{ wtf.form_field(login_form.username) }}
+      {{ wtf.form_field(login_form.password) }}
+      {{ wtf.form_field(login_form.remember) }}
+
+      <button type="submit" class="btn btn-primary btn-lg" name="login">Log In</button>
+
+      <!-- <div class="submit">
+        <button id="btnin" name="signin" type="submit" class="overlay_button">Log In</button>
+      </div> -->
+
+    </form>
+
+  </div>
+  <div class="form-container signup">
+
+    <form action="/signup" method="POST">
+      <div class="form-header">
+        <h1>Sign Up</h1>
+      </div>
+      {{ signup_form.hidden_tag() }}
+      {{ wtf.form_field(signup_form.username) }}
+      {{ wtf.form_field(signup_form.email) }}
+      {{ wtf.form_field(signup_form.password) }}
+
+      <button type="submit" class="btn btn-primary btn-lg" name="signUp">Sign Up</button>
+
+    </form>
 
   </div>
 
-
-  <footer class="info-box-wrapper">
-    <div class="info-box">
-      <h1>Dynamic Website<br>Julian Broudy</h1>
+  <div class="overlay_container">
+    <div class="overlay">
+      <div class="overlay_panel overlay_left">
+        <h1>Welcome Back!</h1>
+        <p>Please login with your personal details</p>
+        <button id="login" type="button" class="btn btn-secondary">Log In</button>
+      </div>
+      <div class="overlay_panel overlay_right">
+        <h1>Hello dear Friend!</h1>
+        <p>Do you want to become part of our community?</p>
+        <button id="signUp" type="button" class="btn btn-secondary">Sign Up</button>
+        <button id="signInMobile" type="button" class="overlay_button">Log In</button>
+      </div>
     </div>
-  </footer>
+  </div>
+
 
 </div>
+
 {% endblock %}
 
 

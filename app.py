@@ -17,7 +17,7 @@ db = SQLAlchemy(app)
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[
                            InputRequired(), Length(min=4, max=20)])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
                            InputRequired(), Length(min=8, max=80)])
     remember = BooleanField('Remember me')
 
@@ -27,11 +27,11 @@ class SignUpForm(FlaskForm):
         message='Invalid Email'), Length(max=50)])
     username = StringField('Username', validators=[
         InputRequired(), Length(min=4, max=20)])
-    password = StringField('Password', validators=[
+    password = PasswordField('Password', validators=[
         InputRequired(), Length(min=8, max=80)])
 
 
-class Users(db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(50), unique=True)
@@ -65,7 +65,17 @@ def register():
     login_form = LoginForm()
 
     if signup_form.validate_on_submit():
-        return "HI"
+        username = signup_form.username.data
+        email = signup_form.email.data
+        password = signup_form.password.data
+        new_user = User(username=username, email=email,password=password)
+        try:
+            db.session.add(new_user)
+            db.session.commit()
+            return render_template('about.html')
+            # return redirect('/about')
+        except:
+            return "Oopsie, there was an error, please try again!"
     # handle the register form
     # render the same template to pass the error message
     # or pass `form.errors` with `flash()` or `session` then redirect to /

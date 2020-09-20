@@ -2,7 +2,7 @@
 
 {% block navbar %}
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="{{ url_for('image_to_cloud') }}">ImageToCloud</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -10,29 +10,57 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#">Generator <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
+        <a class="nav-link" href="#">My Files</a>
       </li>
     </ul>
     <ul class=" navbar-nav ml-auto">
-      <a class="btn btn-outline-success" href="{{ url_for('logout')}}">Log Out</a>
+      <a href="{{ url_for('logout') }}" class="btn btn-primary btn-danger btn-lg  " role="button" aria-pressed="true">Log Out</a>
     </ul>
   </div>
 </nav>
-
-
-
-Dashboard
 {% endblock %}
 
 {% block content %}
+
+<div class="dashboard-container">
+
+  <h1>Words Cloud Generator</h1>
+  <p>Simple: upload a picture and get your words cloud.</p>
+
+
+
+
+
+  {% with messages = get_flashed_messages(category_filter=["register_flashes"]) %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-success alert-dismissible" role="alert">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+{% if image %}
+
+  <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+  {% endif %}
+
+</div>
+
 {% endblock %}
 
 
 {% block styles %}
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<link rel="stylesheet" href="{{ url_for('static',filename='css/stylesheet.css')}}">
+
 {% endblock %}
 
 {% block scripts %}

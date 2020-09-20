@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, Markup
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
@@ -7,7 +7,12 @@ from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import InputRequired, Email, Length
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError
-
+from clarifai.rest import ClarifaiApp
+import sys
+from PIL import Image
+from wordcloud import WordCloud
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -17,6 +22,9 @@ db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+clariApp = ClarifaiApp(api_key='42e02d92f61c4c8b9ced1dd81065df1b')
+model = clariApp.public_models.general_model
 
 
 class User(UserMixin, db.Model):
@@ -87,7 +95,7 @@ def register():
         try:
             db.session.add(new_user)
             db.session.commit()
-            flash('Thanks for registering')
+            flash('Thanks for registering', "register_flashes")
             return redirect(url_for('dashboard'))
         except IntegrityError:
             db.session.rollback()
@@ -96,10 +104,32 @@ def register():
     return render_template('index.html', signup_form=signup_form, login_form=login_form, show_signup=True)
 
 
-@app.route('/dashboard')
+@app.route('/image_to_cloud')
 @login_required
-def dashboard():
-    return render_template("dashboard.html")
+def image_to_cloud():
+    response = model.predict_by_filename('static/images/cat.jpg')
+    # get_relevant_tags('static/images/cat.jpg')
+    # print(response, file=sys.stdout)
+    resulting_concepts = response['outputs'][0]['data']['concepts']
+    concepts = dict()
+    words_list = list()
+    for concept in resulting_concepts:
+        # app.logger.info(concept['name'], concept['value'])
+        concepts[concept['name']] = concept['value']
+        words_list.append(concept['name'])
+    # app.logger.info(resulting_concepts)
+    # app.logger.info(concepts)
+    app.logger.info(words_list)
+
+    # cloud = WordCloud().generate((" ").join(words_list))
+    # cloud = WordCloud().generate_from_frequencies(concepts)
+    # image = BytesIO()
+    # cloud.to_image().save(image, 'PNG')
+    # img_str = base64.b64encode(image.getvalue())
+
+    # return render_template("image_to_cloud.html", image=img_str.decode('utf-8'))
+    return render_template("image_to_cloud.html")
+
 
 
 @app.route('/logout')

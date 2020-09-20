@@ -74,7 +74,7 @@ def login():
         if user:
             if user.password == login_form.password.data:
                 login_user(user, remember=login_form.remember.data)
-                return redirect(url_for('image_to_cloud'))
+                return redirect(url_for('dashboard'))
             flash("Incorrect password.", "login_flashes")
         else:
             flash("E-mail doesn not exist.", "login_flashes")
@@ -96,7 +96,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Thanks for registering', "register_flashes")
-            return redirect(url_for('image_to_cloud'))
+            return redirect(url_for('dashboard'))
         except IntegrityError:
             db.session.rollback()
             flash("E-mail already exists. Log-in instead.", "signup_flashes")
@@ -104,22 +104,20 @@ def signup():
     return render_template('index.html', signup_form=signup_form, login_form=login_form, show_signup=True)
 
 
-@app.route('/image_to_cloud')
+@app.route('/dashboard')
 @login_required
-def image_to_cloud():
-    response = model.predict_by_filename('static/images/cat.jpg')
-    # get_relevant_tags('static/images/cat.jpg')
-    # print(response, file=sys.stdout)
-    resulting_concepts = response['outputs'][0]['data']['concepts']
-    concepts = dict()
-    words_list = list()
-    for concept in resulting_concepts:
-        # app.logger.info(concept['name'], concept['value'])
-        concepts[concept['name']] = concept['value']
-        words_list.append(concept['name'])
+def dashboard():
+    # response = model.predict_by_filename('static/images/cat.jpg')
+    # resulting_concepts = response['outputs'][0]['data']['concepts']
+    # concepts = dict()
+    # words_list = list()
+    # for concept in resulting_concepts:
+    #     # app.logger.info(concept['name'], concept['value'])
+    #     concepts[concept['name']] = concept['value']
+    #     words_list.append(concept['name'])
     # app.logger.info(resulting_concepts)
     # app.logger.info(concepts)
-    app.logger.info(words_list)
+    # app.logger.info(words_list)
 
     # cloud = WordCloud().generate((" ").join(words_list))
     # cloud = WordCloud().generate_from_frequencies(concepts)
@@ -128,7 +126,7 @@ def image_to_cloud():
     # img_str = base64.b64encode(image.getvalue())
 
     # return render_template("image_to_cloud.html", image=img_str.decode('utf-8'))
-    return render_template("image_to_cloud.html")
+    return render_template("dashboard.html",username=current_user.username)
 
 
 

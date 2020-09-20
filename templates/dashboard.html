@@ -1,7 +1,7 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
 {% block navbar %}
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
   <a class="navbar-brand" href="{{ url_for('dashboard') }}">ImageToCloud</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
 
 
 {% block content %}
-<div class="centering-container">
+<div class="padded-vwh background-enhancer center">
 
   {% with messages = get_flashed_messages(category_filter=["register_flashes"]) %}
   {% if messages %}
@@ -41,8 +41,16 @@
   {% endwith %}
 
 
-<h1>Welcome back {{ username }}</h1>
+  <h1>Welcome back {{ username }}!</h1>
 
+<div class="dashboard-text center center-text">
+
+  <h3 id="instructions">It is <strong>simple</strong> really.
+    </br>Upload a picture, get your words cloud :)
+
+  </br></br>What are you waiting for?</br>Head to the generator and try it out!</h3>
+
+</div>
   {% if image %}
   <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
   {% endif %}

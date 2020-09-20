@@ -74,7 +74,7 @@ def login():
         if user:
             if user.password == login_form.password.data:
                 login_user(user, remember=login_form.remember.data)
-                return redirect(url_for('dashboard'))
+                return redirect(url_for('image_to_cloud'))
             flash("Incorrect password.", "login_flashes")
         else:
             flash("E-mail doesn not exist.", "login_flashes")
@@ -83,7 +83,7 @@ def login():
 
 
 @app.route('/signup', methods=['GET', 'POST'])
-def register():
+def signup():
     signup_form = SignUpForm()
     login_form = LoginForm()
 
@@ -96,7 +96,7 @@ def register():
             db.session.add(new_user)
             db.session.commit()
             flash('Thanks for registering', "register_flashes")
-            return redirect(url_for('dashboard'))
+            return redirect(url_for('image_to_cloud'))
         except IntegrityError:
             db.session.rollback()
             flash("E-mail already exists. Log-in instead.", "signup_flashes")

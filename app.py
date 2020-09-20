@@ -14,6 +14,7 @@ from wordcloud import WordCloud
 from io import BytesIO
 import base64
 
+
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = 'secretKey'
@@ -107,28 +108,29 @@ def signup():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    # response = model.predict_by_filename('static/images/cat.jpg')
-    # resulting_concepts = response['outputs'][0]['data']['concepts']
-    # concepts = dict()
-    # words_list = list()
-    # for concept in resulting_concepts:
-    #     # app.logger.info(concept['name'], concept['value'])
-    #     concepts[concept['name']] = concept['value']
-    #     words_list.append(concept['name'])
-    # app.logger.info(resulting_concepts)
-    # app.logger.info(concepts)
-    # app.logger.info(words_list)
-
-    # cloud = WordCloud().generate((" ").join(words_list))
-    # cloud = WordCloud().generate_from_frequencies(concepts)
-    # image = BytesIO()
-    # cloud.to_image().save(image, 'PNG')
-    # img_str = base64.b64encode(image.getvalue())
-
-    # return render_template("image_to_cloud.html", image=img_str.decode('utf-8'))
-    return render_template("dashboard.html",username=current_user.username)
+    return render_template("dashboard.html", username=current_user.username)
 
 
+@app.route('/generator')
+@login_required
+def generator():
+    return render_template("generator.html")
+
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    app.logger.info("hi1")
+    if request.method == "POST":
+        response = model.predict_by_filename('static/images/cat.jpg')
+        resulting_concepts = response['outputs'][0]['data']['concepts']
+        concepts = dict()
+        for concept in resulting_concepts:
+            concepts[concept['name']] = concept['value']
+        cloud = WordCloud().generate_from_frequencies(concepts)
+        image = BytesIO()
+        cloud.to_image().save(image, 'PNG')
+        img_str = base64.b64encode(image.getvalue())
+        return render_template("generator.html", image=img_str.decode('utf-8'))
+    return render_template("generator.html")
 
 @app.route('/logout')
 @login_required

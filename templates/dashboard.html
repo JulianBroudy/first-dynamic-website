@@ -1,31 +1,7 @@
-{% extends "base.html" %}
-
-{% block navbar %}
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="{{ url_for('dashboard') }}">ImageToCloud</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="#">Generator <span class="sr-only">(current)</span></a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">My Files</a>
-      </li>
-    </ul>
-    <ul class=" navbar-nav ml-auto">
-      <a href="{{ url_for('logout') }}" class="btn btn-primary btn-danger btn-lg  " role="button" aria-pressed="true">Log Out</a>
-    </ul>
-  </div>
-</nav>
-{% endblock %}
-
+{% extends "navbar.html" %}
 
 {% block content %}
-<div class="padded-vwh background-enhancer center">
+<div class="full-vwh background-enhancer center">
 
   {% with messages = get_flashed_messages(category_filter=["register_flashes"]) %}
   {% if messages %}
@@ -41,19 +17,20 @@
   {% endwith %}
 
 
-  <h1>Welcome back {{ username }}!</h1>
+<div class="padded-container center-text">
 
-<div class="dashboard-text center center-text">
+  <h1 id="welcome-text">Welcome back {{ username }}!</h1>
 
   <h3 id="instructions">It is <strong>simple</strong> really.
     </br>Upload a picture, get your words cloud :)
 
   </br></br>What are you waiting for?</br>Head to the generator and try it out!</h3>
 
-</div>
   {% if image %}
   <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
   {% endif %}
 
 </div>
+</div>
+
 {% endblock %}

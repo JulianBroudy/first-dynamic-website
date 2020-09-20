@@ -1,0 +1,32 @@
+{% extends "navbar.html" %}
+
+
+{% block content %}
+<div class="full-vwh background-enhancer center">
+  <div class="padded-container">
+
+  <h1>Photo Upload</h1>
+
+  <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="upload-input">.png, .jpg, .jpeg</label>
+      <input type="file" class="form-control-file" id="upload-input">
+  </div>
+  <button type="submit" class="btn btn-primary">Upload</button>
+
+
+  </form>
+
+
+  {% if image %}
+  <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+  {% endif %}
+
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

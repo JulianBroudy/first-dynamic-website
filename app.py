@@ -15,6 +15,7 @@ from io import BytesIO
 import base64
 
 
+
 app = Flask(__name__)
 Bootstrap(app)
 app.config['SECRET_KEY'] = 'secretKey'

@@ -102,6 +102,7 @@ def signup():
             db.session.add(new_user)
             db.session.commit()
             flash('Thanks for registering', "register_flashes")
+            login_user(new_user)
             return redirect(url_for('dashboard'))
         except IntegrityError:
             db.session.rollback()

@@ -2,35 +2,33 @@
 
 {% block content %}
 <div class="full-vwh background-enhancer center">
+  <div class="padded-container center-text">
 
-  {% with messages = get_flashed_messages(category_filter=["register_flashes"]) %}
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-success alert-dismissible" role="alert">
-    {{ message }}
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
+    {% with messages = get_flashed_messages(category_filter=["register_flashes"]) %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success alert-dismissible" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <h1 id="welcome-text">Welcome back {{ username }}!</h1>
+
+    <h3 id="instructions">It is <strong>simple</strong> really.
+      </br>Upload a picture, get your words cloud :)
+
+      </br></br>What are you waiting for?</br>Head to the generator and try it out!</h3>
+
+    {% if image %}
+    <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+    {% endif %}
+
   </div>
-  {% endfor %}
-  {% endif %}
-  {% endwith %}
-
-
-<div class="padded-container center-text">
-
-  <h1 id="welcome-text">Welcome back {{ username }}!</h1>
-
-  <h3 id="instructions">It is <strong>simple</strong> really.
-    </br>Upload a picture, get your words cloud :)
-
-  </br></br>What are you waiting for?</br>Head to the generator and try it out!</h3>
-
-  {% if image %}
-  <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
-  {% endif %}
-
-</div>
 </div>
 
 {% endblock %}

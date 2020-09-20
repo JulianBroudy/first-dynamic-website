@@ -13,7 +13,7 @@ from PIL import Image
 from wordcloud import WordCloud
 from io import BytesIO
 import base64
-
+import os
 
 
 app = Flask(__name__)
@@ -27,6 +27,10 @@ login_manager.login_view = 'login'
 
 clariApp = ClarifaiApp(api_key='42e02d92f61c4c8b9ced1dd81065df1b')
 model = clariApp.public_models.general_model
+
+uploads_dir = os.path.join(app.instance_path, 'uploads')
+if not os.path.exists(uploads_dir):
+    os.makedirs(uploads_dir)
 
 
 class User(UserMixin, db.Model):
@@ -112,34 +116,37 @@ def dashboard():
     return render_template("dashboard.html", username=current_user.username)
 
 
-@app.route('/generator')
+@app.route('/generator', methods=['GET', 'POST'])
 @login_required
 def generator():
     return render_template("generator.html")
 
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
-    app.logger.info("hi1")
     if request.method == "POST":
-        response = model.predict_by_filename('static/images/cat.jpg')
-        resulting_concepts = response['outputs'][0]['data']['concepts']
-        concepts = dict()
-        for concept in resulting_concepts:
-            concepts[concept['name']] = concept['value']
-        cloud = WordCloud().generate_from_frequencies(concepts)
-        image = BytesIO()
-        cloud.to_image().save(image, 'PNG')
-        img_str = base64.b64encode(image.getvalue())
-        return render_template("generator.html", image=img_str.decode('utf-8'))
+        if request.files:
+            image = request.files["image"]
+            app.logger.info(image.filename)
+            if image.filename != "":
+                image.save(os.path.join(uploads_dir, image.filename))
+                response = model.predict_by_filename(
+                    os.path.join(uploads_dir, image.filename))
+                resulting_concepts = response['outputs'][0]['data']['concepts']
+                concepts = dict()
+                for concept in resulting_concepts:
+                    concepts[concept['name']] = concept['value']
+                app.logger.info(concepts)
+                cloud = WordCloud().generate_from_frequencies(concepts)
+                image = BytesIO()
+                cloud.to_image().save(image, 'PNG')
+                img_str = base64.b64encode(image.getvalue())
+                return render_template("generator.html", image=img_str.decode('utf-8'))
     return render_template("generator.html")
 
-@app.route('/logout')
-@login_required
+
+@ app.route('/logout')
+@ login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-@app.route('/about')
-def about():
-    return render_template("about.html")

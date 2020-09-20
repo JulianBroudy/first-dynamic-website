@@ -4,17 +4,20 @@
 {% block content %}
 <div class="full-vwh background-enhancer center">
   <div class="padded-container">
-<br><br>
-    <h1 class="center-text">Photo Upload</h1>
 
-    <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+<br>
+<br>
+<br>
+    <form  action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+
       <div class="form-group">
-        <label for="upload-input">.png, .jpg, .jpeg</label>
-        <input type="file" class="form-control-lg form-control-file" id="upload-input">
+          <label id="upload-title">Upload an image:</label>
+          <div class="custom-file">
+            <input type="file" name="image" value="custom-file-input" id="image">
+            <label for="image" class="custom-file-label">Select from device...</label>
+          </div>
       </div>
       <button type="submit" class="btn btn-primary btn-lg btn-block">Upload</button>
-
-
     </form>
 
     <br><br>
@@ -23,6 +26,9 @@
 
       {% if image %}
       <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
+      <br>
+      <br>
+      <h4>Reload page to generate another cloud for the same photo.</h4>
       {% endif %}
     </div>
 

@@ -73,7 +73,7 @@ body {
   background: yellow;
 }
 
-form {
+.form-container form {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -247,4 +247,12 @@ p.help-block {
 #instructions{
   margin-top: 150px;
   line-height: 50px;
+}
+
+
+/* Generator */
+
+#upload-title{
+  font-size: 30px;
+
 }

@@ -130,15 +130,24 @@ def upload():
             image = request.files["image"]
             app.logger.info(image.filename)
             if image.filename != "":
+                height = int(request.form.get('height'))
+                width = int(request.form.get('width'))
+                numberOfWords = int(request.form.get('rangeInput'))
+                repeat = True if numberOfWords > 200 else False
+                bgColor = None
+                if request.form.get('bgcolor'):
+                    bgColor = "#" + request.form.get('bgcolor')
                 image.save(os.path.join(uploads_dir, image.filename))
+                app.logger.info("num: ", numberOfWords)
                 response = model.predict_by_filename(
-                    os.path.join(uploads_dir, image.filename))
+                    os.path.join(uploads_dir, image.filename), max_concepts=200 if repeat else numberOfWords)
                 resulting_concepts = response['outputs'][0]['data']['concepts']
                 concepts = dict()
                 for concept in resulting_concepts:
                     concepts[concept['name']] = concept['value']
-                app.logger.info(concepts)
-                cloud = WordCloud().generate_from_frequencies(concepts)
+                # app.logger.info(concepts)
+                cloud = WordCloud(mode='RGBA', background_color=bgColor,
+                                  width=width, height=height, max_words=numberOfWords, repeat=repeat).generate_from_frequencies(concepts)
                 image = BytesIO()
                 cloud.to_image().save(image, 'PNG')
                 img_str = base64.b64encode(image.getvalue())
@@ -151,3 +160,8 @@ def upload():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@ app.route('/temp')
+def temp():
+    return render_template("temp.html")

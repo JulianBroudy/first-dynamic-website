@@ -3,38 +3,111 @@
 
 {% block content %}
 <div class="full-vwh background-enhancer center">
-  <div class="padded-container">
+  <div class="padded-container center-row">
     <br>
     <br>
     <br>
-    <form action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
 
-      <div class="form-group">
-        <label id="upload-title">Upload an image:</label>
-        <div class="custom-file">
-          <input type="file" name="image" value="custom-file-input" id="image">
-          <label for="image" class="custom-file-label">Select from device...</label>
+    <form class="upload-form" action="{{url_for('upload')}}" method="POST" enctype="multipart/form-data">
+
+      <div class="form-group row">
+        <div class="col">
+          <label><strong>Please upload a picture:</strong></label>
+
+          <div class="custom-file">
+            <label for="image" class="custom-file-label">Select from device...</label>
+            <input type="file" name="image" value="custom-file-input" id="image">
+          </div>
         </div>
       </div>
-      <button type="submit" class="btn btn-primary btn-lg btn-block">Upload</button>
+      <br>
+      <label><strong>Specify preferred properties of generated image:</strong></label>
+
+      <div class="form-group row">
+        <div class="col">
+          <label for="height" class="col-form-label">Height:</label>
+          <input type="number" class="form-control" id="height" value="400" name="height">
+        </div>
+        <div class="col">
+          <label for="width" class="col-form-label">Width:</label>
+          <input type="number" class="form-control" id="width" value="800" name="width">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col">
+          <label for="numberOfWords">Number of generated words:</label>
+          <input type="range" class="custom-range" id="numberOfWords" min="20" max="2000" value="800" oninput="rangeInput.value = numberOfWords.value">
+        </div>
+      </div>
+
+      <div class=" form-group row">
+        <div class="col center">
+          <input class="form-control" id="rangeInput" type="number" min="20" max="2000" value="800" style="text-align:center; width: 80px;" name="rangeInput" oninput="numberOfWords.value = rangeInput.value">
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col">
+          <label for="background-color" class="col-form-label">Background (HEX) color:</label>
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <div class="input-group-text">#</div>
+            </div>
+            <input type="text" class="form-control" id="background-color" minLength="3" maxlength="6" placeholder="Leave empty for a transparent background." value="" name="bgcolor">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="col">
+          <button type="submit" class="btn btn-blush btn-lg btn-block">Generate</button>
+        </div>
+      </div>
     </form>
-
-    <br><br>
-    <div class="center">
-
-
-      {% if image %}
-      <img src="data:image/jpeg;base64,{{ image }}" alt="Image">
-      <br>
-      <br>
-      <h4>Reload page to generate another cloud for the same photo.</h4>
-      {% endif %}
-    </div>
 
   </div>
 
+  {% if image %}
+
+
+  <div class="modal fade" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Your picture is ready!</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <img class="generated-image" src="data:image/jpeg;base64,{{ image }}" alt="Image">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-blush">Download</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#staticBackdrop').modal('show');
+    });
+  </script>
+
+
+  <!-- <img class="generated-image" src="data:image/jpeg;base64,{{ image }}" alt="Image">
+    <br>
+    <br>
+    <h4>Reload page to generate another cloud for the same photo.</h4> -->
+  {% endif %}
 
 </div>
+
+
 
 
 
